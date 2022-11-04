@@ -21,7 +21,6 @@ const NONCE_LEN: usize = 19;
 const PORT: &str = "2001";
 const MAG_CONSTANT: [u8; 3] = [71,78,85];
 
-//Must be 8 or greater
 const BUFFER_SIZE: usize = 500;
 
 fn signature(message: &str, priv_key: &[u8]) -> String {
@@ -94,6 +93,12 @@ pub fn symmetric_encrypt_and_send(message: &[u8], filenames: Vec<&str>, destIP: 
     println!("{:#?} {:#?}", mag_key, key_copies[0]);
     //Adds the recipient count to the buffer
     for byte in recipient_count_bytes {
+        if i >= BUFFER_SIZE {
+            TCPstream
+                .write(buffer.as_slice())
+                .map_err(|err| anyhow!("Could not write to server: {}", err))?;
+            i = 0;
+        }
         buffer[i] = byte;
         i += 1;
     }
@@ -107,6 +112,7 @@ pub fn symmetric_encrypt_and_send(message: &[u8], filenames: Vec<&str>, destIP: 
                 i = 0;
             }
             buffer[i] = byte;
+            i += 1;
         }
     }
     

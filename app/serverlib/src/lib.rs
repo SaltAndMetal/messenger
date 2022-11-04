@@ -12,16 +12,70 @@ use anyhow::{bail, anyhow, Result, Context};
 use rand::{RngCore, rngs::OsRng};
 use std::thread;
 use std::fs;
-use std::io::{Read, Write};
+use std::io::{Read, Write, Seek, SeekFrom};
+use std::fs::File;
 use std::net::{TcpStream, TcpListener};
 use rsa::{PublicKey, RsaPrivateKey, RsaPublicKey, PaddingScheme};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 const KEY_LEN: usize = 32;
 const NONCE_LEN: usize = 19;
 const PORT: &str = "2001";
 const MAG_CONSTANT: [u8; 3] = [71,78,85];
 
-pub fn receive_and_decode
+const BUFFER_SIZE: usize = 500;
+
+//Receives and stores messages sent from clients
+//File specifications: date_keys consists of:
+//timestamp (unix time): 8 bytes
+//database index: 8 bytes
+//This means the max size for the database of messages is 2305 petabytes. This is unlikely to be a
+//problem
+//The timestamp and and index for each message are all just stored sequentially.
+//database consists of all messages, stored sequentially.
+pub fn receive_and_store(client_stream: TcpStream, priv_key: RsaPrivateKey, date_key_path: &str, database_path: &str) -> Result<()> {
+
+    let mut buffer = [0u8; BUFFER_SIZE];
+
+    let mut current_time = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|err| anyhow!("System time is earlier than UNIX epoch. Somehow. : {err}"))?
+        .as_secs();
+
+    let mut last_message_time = [0u8; 8];
+    {
+    let mut date_keys = File::open(date_key_path)
+        .map_err(|err| anyhow!("Could not open date key file at path {date_key_path}: {err}"))?;
+    date_keys.seek(SeekFrom::End(-16))
+        .map_err(|err| anyhow!("Could not seek to end-16 bytes in date key file at path {date_key_path}: {err}"))?;
+
+    date_keys.read(&mut last_message_time)
+        .map_err(|err| anyhow!("Could not read date key file at path {date_key_path}: {err}"))?;
+    }
+
+    let last_message_time = u64::from_be_bytes(last_message_time);
+    if current_time <= last_message_time {
+        current_time = last_message_time + 1;
+    }
+
+    let mut database = File::open(database_path)
+        .map_err(|err| anyhow!("Could not open database file at path {database_path}: {err}"))?;
+    let database_len = database.metadata()
+        .map_err(|err| anyhow!("Could not access metadata for database file at path {database_path}: {err}"))?
+        .len();
+
+    let mut date_keys = File::options()
+        .append(true)
+        .open(date_key_path)
+        .map_err(|err| anyhow!("Could not open data key file at path {date_key_path}: {err}"))?;
+    date_keys.write(&current_time.to_be_bytes())
+        .map_err(|err| anyhow!("Could not write current time into data key file at path {date_key_path}: {err}"))?;
+    date_keys.write(&(database_len-1).to_be_bytes())
+        .map_err(|err| anyhow!("Could not write index for message into data key file at path {date_key_path}: {err}"))?;
+
+
+    unimplemented!()
+}
 
 #[cfg(test)]
 mod tests {
