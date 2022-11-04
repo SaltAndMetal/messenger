@@ -181,6 +181,66 @@ pub fn symmetric_encrypt_and_send(message: &[u8], filenames: Vec<&str>, destIP: 
     }
     Ok(())
 }
+
+fn read_message(stream: TcpStream, priv_key: RsaPrivateKey) -> Result<()> {
+    enum ReadState {
+        KeyNum,
+        Keys,
+        MessageLen,
+        Message,
+        FileLen,
+        File,
+    }
+    type Position = (ReadState, usize);
+
+    //A whole load of buffers and positions in those buffers
+    let mut position: Position = (ReadState::KeyNum, 0);
+    let mut key_num_bytes = [0u8; 8];
+    let mut key_num = 0;
+    let mut current_key = 0;
+    let mut key_buf = [0u8; ENCRYPTED_KEY_LEN];
+    let mut key_buf_pos = 0;
+    let mut buf_pos = 0;
+    let mut read_count = 0;
+    'read: loop {
+        if buf_pos == BUFFER_SIZE {
+            read_count = client_stream.read(&mut buffer)
+                .map_err(|err| anyhow!("Error receiving message from client: {err}"))?;
+        }
+        if read_count < BUFFER_SIZE {
+            unimplemented!()
+        }
+        match position.0 { 
+            ReadState::KeyNum => {
+                while position.1 < 8 {
+                    key_num_bytes[position.1] = buffer[buf_pos];
+                    position.1 += 1;
+                    buf_pos += 1;
+                    if buf_pos == BUFFER_SIZE {
+                        continue 'read;
+                    }
+                };
+                key_num = u64::from_be_bytes(key_num_bytes);
+                position.0 = ReadState::KeyNum;
+                continue;
+            },
+            ReadState::Keys => {
+                key_buf[key_buf_pos] = buffer[buf_pos];
+                key_buf_pos += 1;
+                buf_pos += 1;
+                if key_buf_pos == ENCRYPTED_KEY_LEN {
+                    let (magic, key, nonce) = decrypt_key(key_buf, &priv_key)?;
+
+                }
+            },
+            _ => ()
+        }
+        break;
+    }
+    unimplemented!()
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
