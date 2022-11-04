@@ -21,22 +21,9 @@ const NONCE_LEN: usize = 19;
 const PORT: &str = "2001";
 const MAG_CONSTANT: [u8; 3] = [71,78,85];
 
-const BUFFER_SIZE: usize = 500;
+const BUFFER_SIZE: usize = 512;
 
 fn signature(message: &str, priv_key: &[u8]) -> String {
-    unimplemented!();
-}
-//Message is expected to be prepended with its length. Will prepend the file with its length,
-//then append to message. Returns error if the file is invalid
-fn append_file(message: &mut Vec<u8>, filename: &str) -> Result<()> {
-    let file_size = fs::metadata(filename)?.len().to_be_bytes();
-    let mut bytes_vec = Vec::new();
-    for byte in file_size {
-        bytes_vec.push(byte);
-    }
-    message.append(&mut bytes_vec);
-    message.append(&mut fs::read(filename)?);
-
     unimplemented!();
 }
 
@@ -90,7 +77,7 @@ pub fn symmetric_encrypt_and_send(message: &[u8], filenames: Vec<&str>, destIP: 
         let padding = PaddingScheme::new_oaep::<sha2::Sha256>();
         key_copies.push(key.encrypt(&mut rng, padding, &mag_key.clone()).expect("failed to encrypt"));
     }
-    println!("{:#?} {:#?}", mag_key, key_copies[0]);
+    println!("{:#?}", key_copies[0].len());
     //Adds the recipient count to the buffer
     for byte in recipient_count_bytes {
         if i >= BUFFER_SIZE {

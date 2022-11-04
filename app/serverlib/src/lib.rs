@@ -22,8 +22,9 @@ const KEY_LEN: usize = 32;
 const NONCE_LEN: usize = 19;
 const PORT: &str = "2001";
 const MAG_CONSTANT: [u8; 3] = [71,78,85];
+const ENCRYPTED_KEY_LEN: usize = 512;
 
-const BUFFER_SIZE: usize = 500;
+const BUFFER_SIZE: usize = 512;
 
 //Receives and stores messages sent from clients
 //File specifications: date_keys consists of:
@@ -33,7 +34,7 @@ const BUFFER_SIZE: usize = 500;
 //problem
 //The timestamp and and index for each message are all just stored sequentially.
 //database consists of all messages, stored sequentially.
-pub fn receive_and_store(client_stream: TcpStream, priv_key: RsaPrivateKey, date_key_path: &str, database_path: &str) -> Result<()> {
+pub fn receive_and_store(mut client_stream: TcpStream, priv_key: RsaPrivateKey, date_key_path: &str, database_path: &str) -> Result<()> {
 
     let mut buffer = [0u8; BUFFER_SIZE];
 
@@ -73,8 +74,73 @@ pub fn receive_and_store(client_stream: TcpStream, priv_key: RsaPrivateKey, date
     date_keys.write(&(database_len-1).to_be_bytes())
         .map_err(|err| anyhow!("Could not write index for message into data key file at path {date_key_path}: {err}"))?;
 
+    enum ReadState {
+        KeyNum,
+        Keys,
+        MessageLen,
+        Message,
+        FileLen,
+        File,
+    };
+    type Position = (ReadState, usize);
+
+    //A whole load of buffers and positions in those buffers
+    let mut position: Position = (ReadState::KeyNum, 0);
+    let mut key_num_bytes = [0u8; 8];
+    let mut key_num = 0;
+    let mut current_key = 0;
+    let mut key_buf = [0u8; ENCRYPTED_KEY_LEN];
+    let mut key_buf_pos = 0;
+    let mut buf_pos = 0;
+    let mut read_count = 0;
+    'read: loop {
+        if buf_pos == BUFFER_SIZE {
+            read_count = client_stream.read(&mut buffer)
+                .map_err(|err| anyhow!("Error receiving message from client: {err}"))?;
+        }
+        if read_count < BUFFER_SIZE {
+            unimplemented!()
+        }
+        match position.0 { 
+            ReadState::KeyNum => {
+                while position.1 < 8 {
+                    key_num_bytes[position.1] = buffer[buf_pos];
+                    position.1 += 1;
+                    buf_pos += 1;
+                    if buf_pos == BUFFER_SIZE {
+                        continue 'read;
+                    }
+                };
+                key_num = u64::from_be_bytes(key_num_bytes);
+                position.0 = ReadState::KeyNum;
+                continue;
+            },
+            ReadState::Keys => {
+                key_buf[key_buf_pos] = buffer[buf_pos];
+                key_buf_pos += 1;
+                buf_pos += 1;
+                if key_buf_pos == ENCRYPTED_KEY_LEN {
+                    let (magic, key, nonce) = decrypt_key(key_buf, &priv_key)?;
+
+                }
+            },
+            _ => ()
+        }
+        break;
+    }
 
     unimplemented!()
+}
+
+fn decrypt_key(encrypted_key: [u8; ENCRYPTED_KEY_LEN], priv_key: &RsaPrivateKey) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>)> {
+    let padding = PaddingScheme::new_oaep::<sha2::Sha256>();
+    let decrypted_key_nonce = priv_key.decrypt(padding, &encrypted_key).expect("failed to decrypt");
+    if decrypted_key_nonce.len() != (KEY_LEN+NONCE_LEN) {
+        bail!("Decrypted key is the wrong length");
+    }
+    let (magic, key_nonce) = decrypted_key_nonce.split_at(MAG_CONSTANT.len());
+    let (key, nonce) = key_nonce.split_at(KEY_LEN);
+    Ok((magic.into(), key.into(), nonce.into()))
 }
 
 #[cfg(test)]
