@@ -34,9 +34,7 @@ const BUFFER_SIZE: usize = 512;
 //problem
 //The timestamp and and index for each message are all just stored sequentially.
 //database consists of all messages, stored sequentially.
-pub fn receive_and_store(mut client_stream: TcpStream, priv_key: RsaPrivateKey, date_key_path: &str, database_path: &str) -> Result<()> {
-
-    let mut buffer = [0u8; BUFFER_SIZE];
+pub fn receive_and_store(mut client_stream: TcpStream, date_key_path: &str, database_path: &str) -> Result<()> {
 
     let mut current_time = SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -59,7 +57,9 @@ pub fn receive_and_store(mut client_stream: TcpStream, priv_key: RsaPrivateKey, 
         current_time = last_message_time + 1;
     }
 
-    let mut database = File::open(database_path)
+    let mut database = File::options()
+        .append(true)
+        .open(database_path)
         .map_err(|err| anyhow!("Could not open database file at path {database_path}: {err}"))?;
     let database_len = database.metadata()
         .map_err(|err| anyhow!("Could not access metadata for database file at path {database_path}: {err}"))?
@@ -73,63 +73,22 @@ pub fn receive_and_store(mut client_stream: TcpStream, priv_key: RsaPrivateKey, 
         .map_err(|err| anyhow!("Could not write current time into data key file at path {date_key_path}: {err}"))?;
     date_keys.write(&(database_len-1).to_be_bytes())
         .map_err(|err| anyhow!("Could not write index for message into data key file at path {date_key_path}: {err}"))?;
+   
+    let mut buffer = [0u8; BUFFER_SIZE];
 
-    enum ReadState {
-        KeyNum,
-        Keys,
-        MessageLen,
-        Message,
-        FileLen,
-        File,
-    };
-    type Position = (ReadState, usize);
+    loop {
+        let read_count = client_stream.read(&mut buffer)
+        .map_err(|err| anyhow!("Error reading message data from client: {err}. The last entry in date_keys and however much message was written must be deleted."))?;
 
-    //A whole load of buffers and positions in those buffers
-    let mut position: Position = (ReadState::KeyNum, 0);
-    let mut key_num_bytes = [0u8; 8];
-    let mut key_num = 0;
-    let mut current_key = 0;
-    let mut key_buf = [0u8; ENCRYPTED_KEY_LEN];
-    let mut key_buf_pos = 0;
-    let mut buf_pos = 0;
-    let mut read_count = 0;
-    'read: loop {
-        if buf_pos == BUFFER_SIZE {
-            read_count = client_stream.read(&mut buffer)
-                .map_err(|err| anyhow!("Error receiving message from client: {err}"))?;
-        }
+        database.write(&buffer[..read_count])
+        .map_err(|err| anyhow!("Error writing message data to database: {err}. The last entry in date_keys and however much message was written must be deleted."))?;
+
         if read_count < BUFFER_SIZE {
-            unimplemented!()
+            break;
         }
-        match position.0 { 
-            ReadState::KeyNum => {
-                while position.1 < 8 {
-                    key_num_bytes[position.1] = buffer[buf_pos];
-                    position.1 += 1;
-                    buf_pos += 1;
-                    if buf_pos == BUFFER_SIZE {
-                        continue 'read;
-                    }
-                };
-                key_num = u64::from_be_bytes(key_num_bytes);
-                position.0 = ReadState::KeyNum;
-                continue;
-            },
-            ReadState::Keys => {
-                key_buf[key_buf_pos] = buffer[buf_pos];
-                key_buf_pos += 1;
-                buf_pos += 1;
-                if key_buf_pos == ENCRYPTED_KEY_LEN {
-                    let (magic, key, nonce) = decrypt_key(key_buf, &priv_key)?;
-
-                }
-            },
-            _ => ()
-        }
-        break;
     }
 
-    unimplemented!()
+    Ok(())
 }
 
 fn decrypt_key(encrypted_key: [u8; ENCRYPTED_KEY_LEN], priv_key: &RsaPrivateKey) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>)> {
