@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{booktabs}
+\usepackage{longtable}
+\author{Max Hamilton}
+\title{Logbook}
+\date{}
+
+\titleformat{\section}
+{\huge\bfseries}
+{}
+{0em}
+{}[\titlerule]
+
+\renewcommand{\maketitle}{
+    \begin{center}
+        { \huge\bfseries
+        \thetitle }
+
+        \vspace{0.25cm}
+
+        SDD HSC Major Work - Messenger\\
+        Max Hamilton
+
+        \vspace{0.25cm}
+
+    \end{center}
+}
+
+\begin{document}
+\maketitle
+\centering
+\begin{longtable}{p{0.15\textwidth}p{0.85\textwidth}}
+\caption{Log Book}\\
+\endfirsthead
+\caption{Log Book (Continued)}\\
+\midrule
+\endhead
+\toprule
+Date & Summary\\
+\midrule
+22/10/2022 & Came up with idea for the project. A messenger app. I put a bit of thought into how it would work, and the client. The client would be a company that needs a secure messaging service similar to email. I would provide a client software, and a server software. The client software would be a GUI, and the server may be a GUI or a CLI. The server software will not be able to read messages, and will have the minimum possible information about the messages. This allows for secure outsourcing of the server hosting if the company cannot run their own servers. To add a new user, the server would generate a code which the system administrator could communicate to the new user, which the client uses to send a username and password to the server. On initialisation, the client would generate a public and private key. The client keeps the private key, and sends the public key to the server. To send a message, the client requests the recipient's public key, and encrypts the message with it. The encrypted message is then sent to the server, where it is stored indefinitely. I think I can make it anonymous who exactly is sending and receiving messages. The message on the server is then available for download by all clients, but only the recipient can use their private key to decrypt it. I can have anonymous uploads by encrypting the name of the sender with the rest of the message, and anonymous downloads by having a constant magic number at the start of each message. Every client, on seeing a new available message, would try to decrypt it with their private key, and if the constant magic number didn't match, they could discard it, meaning only the recipient would be able to access it. Additionally, messages would be signed with the sender's public key, then the signature encrypted with the rest. That way, once the message was decrypted, the identity of the sender could be verified. A bad actor could download all encrypted messages, but the would not know the intended recipient, sender, or content. A lot of aspects could be controlled by the server software, such as file size caps, message size limits, and length of saved history.\\
+\midrule
+22/10/2022 & Formulated my thoughts by writing the description of the solution, in a lot of detail. Might have to cut it down later.\\
+\midrule
+22/10/2022 & I have finished the first draft of the design brief, and have a complete plan for the high-level design of my program.\\
+\midrule
+23/10/2022 & I have done some research and begun to implement the core functionality of the client. Experiencing some difficulties deciding to encrypt files on disk, or to pull them into memory.\\
+\bottomrule
+\end{longtable}
+
+\end{document}
