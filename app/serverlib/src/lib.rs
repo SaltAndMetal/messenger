@@ -17,6 +17,7 @@ use std::fs::File;
 use std::net::{TcpStream, TcpListener};
 use rsa::{PublicKey, RsaPrivateKey, RsaPublicKey, PaddingScheme};
 use std::time::{SystemTime, UNIX_EPOCH};
+use std::cmp::Ordering;
 
 const KEY_LEN: usize = 32;
 const NONCE_LEN: usize = 19;
@@ -41,6 +42,8 @@ pub fn receive_and_store(mut client_stream: TcpStream, date_key_path: &str, data
         .map_err(|err| anyhow!("System time is earlier than UNIX epoch. Somehow. : {err}"))?
         .as_secs();
 
+    //Read the time of the last message stored. In a block so the date_keys file is closed after
+    //reading.
     let mut last_message_time = [0u8; 8];
     {
     let mut date_keys = File::open(date_key_path)
@@ -52,11 +55,14 @@ pub fn receive_and_store(mut client_stream: TcpStream, date_key_path: &str, data
         .map_err(|err| anyhow!("Could not read date key file at path {date_key_path}: {err}"))?;
     }
 
+    //Makes sure the current time is later than the last message time. This could be a problem if
+    //multiple messages were stored in the same second.
     let last_message_time = u64::from_be_bytes(last_message_time);
     if current_time <= last_message_time {
         current_time = last_message_time + 1;
     }
 
+    //Opens the database and date keys file for appending
     let mut database = File::options()
         .append(true)
         .open(database_path)
@@ -74,8 +80,8 @@ pub fn receive_and_store(mut client_stream: TcpStream, date_key_path: &str, data
     date_keys.write(&(database_len-1).to_be_bytes())
         .map_err(|err| anyhow!("Could not write index for message into data key file at path {date_key_path}: {err}"))?;
    
+    //Reads message from client and saves it to the database.
     let mut buffer = [0u8; BUFFER_SIZE];
-
     loop {
         let read_count = client_stream.read(&mut buffer)
         .map_err(|err| anyhow!("Error reading message data from client: {err}. The last entry in date_keys and however much message was written must be deleted."))?;
@@ -91,15 +97,105 @@ pub fn receive_and_store(mut client_stream: TcpStream, date_key_path: &str, data
     Ok(())
 }
 
-fn decrypt_key(encrypted_key: [u8; ENCRYPTED_KEY_LEN], priv_key: &RsaPrivateKey) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>)> {
-    let padding = PaddingScheme::new_oaep::<sha2::Sha256>();
-    let decrypted_key_nonce = priv_key.decrypt(padding, &encrypted_key).expect("failed to decrypt");
-    if decrypted_key_nonce.len() != (KEY_LEN+NONCE_LEN) {
-        bail!("Decrypted key is the wrong length");
+//Handle a query for the recipient keys of the first message past a certain timestamp
+fn handle_recipiency_query(mut client_stream: TcpStream, date_key_path: &str, database_path: &str, timestamp: u64) -> Result<Option<()>> {
+    //Opens the date keys file and gets the length. Length is in units of 16 bytes.
+    let mut date_keys = File::open(date_key_path)
+        .map_err(|err| anyhow!("Could not open date key file at path {date_key_path}: {err}"))?;
+    let date_keys_len = date_keys.metadata()
+        .map_err(|err| anyhow!("Could not access metadata for date keys file at path {database_path}: {err}"))?
+        .len()/16;
+
+    //Binary search to find the timestamp
+    let index;
+    let mut position = date_keys_len/2;
+    let mut buf = [0u8; 8];
+    let mut time;
+    loop {
+        date_keys.seek(SeekFrom::Start(position*16))
+            .map_err(|err| anyhow!("Could not seek to end-16 bytes in date key file at path {date_key_path}: {err}"))?;
+        let read_count = date_keys.read(&mut buf)
+            .map_err(|err| anyhow!("Could not read date key file at path {date_key_path}: {err}"))?;
+        if read_count < buf.len() {
+            bail!("Date key file at path {date_key_path} is malformed");
+        }
+        time = u64::from_be_bytes(buf);
+        match time.cmp(&timestamp) {
+            Ordering::Equal => {
+                //If equal, find the next timestamp
+                if position == date_keys_len {
+                    return Ok(None);
+                }
+                let read_count = date_keys.read(&mut buf)
+                    .map_err(|err| anyhow!("Could not read date key file at path {date_key_path}: {err}"))?;
+                if read_count < buf.len() {
+                    bail!("Date key file at path {date_key_path} is malformed");
+                }
+                index = u64::from_be_bytes(buf.clone());
+                break;
+            },
+            //If less, check if the next one is more. If it is, that is the one. Otherwise, keep
+            //looking
+            Ordering::Less => {
+                if position == date_keys_len {
+                    return Ok(None);
+                }
+                let read_count = date_keys.read(&mut buf)
+                    .map_err(|err| anyhow!("Could not read date key file at path {date_key_path}: {err}"))?;
+                if read_count < buf.len() {
+                    bail!("Date key file at path {date_key_path} is malformed");
+                }
+                let next = u64::from_be_bytes(buf.clone());
+                if next > timestamp {
+                    index = next;
+                    break;
+                }
+                let new_position = (position + date_keys_len)/2;
+                if new_position == position {
+                    bail!("Timestamp not in date key file {date_key_path}");
+                }
+                position = new_position;
+            },
+            //If greater, keep looking
+            Ordering::Greater => {
+                let new_position = (position+0)/2;
+                if new_position == position {
+                    bail!("Timestamp not in date key file {date_key_path}");
+                }
+                position = new_position;
+            },
+            
+        }
     }
-    let (magic, key_nonce) = decrypted_key_nonce.split_at(MAG_CONSTANT.len());
-    let (key, nonce) = key_nonce.split_at(KEY_LEN);
-    Ok((magic.into(), key.into(), nonce.into()))
+
+    //Open database file at index
+    let mut database = File::open(database_path)
+        .map_err(|err| anyhow!("Could not open database file at path {database_path}: {err}"))?;
+    database.seek(SeekFrom::Start(index))
+        .map_err(|err| anyhow!("Could not seek to index {index} of database file at path {database_path}. Either the database file or the date key file is malformed."))?;
+
+    //Read the number of keys
+    let read_count = database.read(&mut buf)
+        .map_err(|err| anyhow!("Could not read database file at path {database_path}: {err}"))?;
+    if read_count < buf.len() {
+        bail!("Database file at path {database_path} is malformed. Could not read key number");
+    }
+    client_stream.write(&buf)
+        .map_err(|err| anyhow!("Error writing key number to client: {err}"))?;
+    let key_num = u64::from_be_bytes(buf);
+
+    //Read and send all the keys
+    let mut key_buf = [0u8; ENCRYPTED_KEY_LEN];
+    for _ in 0..key_num {
+        let read_count = database.read(&mut key_buf)
+            .map_err(|err| anyhow!("Could not read database file at path {database_path}: {err}"))?;
+        if read_count < ENCRYPTED_KEY_LEN {
+            bail!("Database file at path {database_path} is malformed. Could not read keys");
+        }
+        client_stream.write(&key_buf)
+            .map_err(|err| anyhow!("Error writing keys to client: {err}"))?;
+    }
+    Ok(Some(()))
 }
 
 #[cfg(test)]
@@ -108,7 +204,5 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
     }
 }
