@@ -5,23 +5,27 @@
 \contentsline {subsection}{\numberline {2.3}Description of the solution}{2}%
 \contentsline {subsubsection}{\numberline {2.3.1}Initialisation}{2}%
 \contentsline {subsubsection}{\numberline {2.3.2}Access control and authentication}{3}%
-\contentsline {subsubsection}{\numberline {2.3.3}Sending Messages}{4}%
-\contentsline {subsubsection}{\numberline {2.3.4}Receiving messages}{6}%
-\contentsline {subsubsection}{\numberline {2.3.5}Storage}{7}%
-\contentsline {section}{\numberline {3}Planning the software solution}{8}%
-\contentsline {subsection}{\numberline {3.1}Algorithms}{8}%
-\contentsline {subsection}{\numberline {3.2}Prototype}{8}%
-\contentsline {subsection}{\numberline {3.3}Data Dictionary}{8}%
+\contentsline {subsubsection}{\numberline {2.3.3}Sending Messages}{3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Receiving messages}{4}%
+\contentsline {subsubsection}{\numberline {2.3.5}Storage}{5}%
+\contentsline {section}{\numberline {3}Planning the software solution}{5}%
+\contentsline {subsection}{\numberline {3.1}Algorithms}{5}%
+\contentsline {subsection}{\numberline {3.2}Prototype}{7}%
+\contentsline {subsection}{\numberline {3.3}Data Dictionary}{7}%
 \contentsline {subsection}{\numberline {3.4}Modelling tools}{8}%
-\contentsline {subsection}{\numberline {3.5}Programming language}{8}%
-\contentsline {subsection}{\numberline {3.6}Logbook}{8}%
-\contentsline {section}{\numberline {4}Building the software solution}{8}%
-\contentsline {subsection}{\numberline {4.1}Source code}{8}%
-\contentsline {subsection}{\numberline {4.2}Feedback}{8}%
-\contentsline {section}{\numberline {5}Documenting to meet installation of software solution}{8}%
-\contentsline {subsection}{\numberline {5.1}Installation guide}{8}%
-\contentsline {subsection}{\numberline {5.2}User manual}{8}%
-\contentsline {subsection}{\numberline {5.3}Testing methods}{8}%
-\contentsline {section}{\numberline {6}Evaluate and suggest modifications}{8}%
-\contentsline {subsection}{\numberline {6.1}Evaluation}{8}%
-\contentsline {subsection}{\numberline {6.2}Logbook}{8}%
+\contentsline {subsection}{\numberline {3.5}Programming language}{9}%
+\contentsline {subsection}{\numberline {3.6}Logbook}{9}%
+\contentsline {section}{\numberline {4}Building the software solution}{9}%
+\contentsline {subsection}{\numberline {4.1}Source code}{9}%
+\contentsline {subsection}{\numberline {4.2}Feedback}{10}%
+\contentsline {section}{\numberline {5}Documenting to meet installation of software solution}{10}%
+\contentsline {subsection}{\numberline {5.1}Installation guide}{10}%
+\contentsline {subsubsection}{\numberline {5.1.1}Server installation}{10}%
+\contentsline {subsubsection}{\numberline {5.1.2}Client installation}{10}%
+\contentsline {subsection}{\numberline {5.2}User manual}{10}%
+\contentsline {subsubsection}{\numberline {5.2.1}Admin}{10}%
+\contentsline {subsubsection}{\numberline {5.2.2}User}{10}%
+\contentsline {subsection}{\numberline {5.3}Testing methods}{11}%
+\contentsline {section}{\numberline {6}Evaluate and suggest modifications}{11}%
+\contentsline {subsection}{\numberline {6.1}Evaluation}{11}%
+\contentsline {subsection}{\numberline {6.2}Logbook}{11}%

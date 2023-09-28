@@ -1,4 +1,5 @@
 \relax 
+\providecommand \oddpage@label [2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Terminology}{2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Design Brief}{2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Client and target audience}{2}\protected@file@percent }
@@ -8,29 +9,48 @@
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Security considerations}}{3}\protected@file@percent }
 \newlabel{tab:secconsinit}{{1}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.2}Access control and authentication}{3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Security considerations}}{4}\protected@file@percent }
-\newlabel{tab:secconsauth}{{2}{4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.3}Sending Messages}{4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Security considerations}}{6}\protected@file@percent }
-\newlabel{tab:secconssend}{{3}{6}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.4}Receiving messages}{6}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Security considerations}}{7}\protected@file@percent }
-\newlabel{tab:secconsrecv}{{4}{7}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.5}Storage}{7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Planning the software solution}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Algorithms}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Prototype}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Data Dictionary}{8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Security considerations}}{3}\protected@file@percent }
+\newlabel{tab:secconsauth}{{2}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.3}Sending Messages}{3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Security considerations}}{4}\protected@file@percent }
+\newlabel{tab:secconssend}{{3}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.4}Receiving messages}{4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Security considerations}}{5}\protected@file@percent }
+\newlabel{tab:secconsrecv}{{4}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.5}Storage}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Planning the software solution}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Algorithms}{5}\protected@file@percent }
+\newlabel{alg:receiveConnections}{{1}{5}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Loops forever, handling incoming connections concurrently}}{5}\protected@file@percent }
+\newlabel{alg:handleConnection}{{2}{6}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Handles a single connection, authenticating then dispatching it off the the dedicated function to handle it's request}}{6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Prototype}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Data Dictionary}{7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Data Dictionary}}{7}\protected@file@percent }
+\newlabel{tab:datadictionary}{{5}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Modelling tools}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Programming language}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Logbook}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Building the software solution}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Source code}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Feedback}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Documenting to meet installation of software solution}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Installation guide}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}User manual}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Testing methods}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Evaluate and suggest modifications}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Evaluation}{8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Logbook}{8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Data flow diagram for the process of adding a new client}}{8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Context diagram for the server handling messages}}{9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Programming language}{9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Logbook}{9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Building the software solution}{9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Source code}{9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Feedback}{10}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Feedback form}}{10}\protected@file@percent }
+\newlabel{tab:feedback}{{6}{10}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Documenting to meet installation of software solution}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Installation guide}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}Server installation}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.2}Client installation}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}User manual}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Admin}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}User}{10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Testing methods}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Evaluate and suggest modifications}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Evaluation}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Logbook}{11}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{Log Book}}{11}\protected@file@percent }
+\gdef \LT@i {\LT@entry 
+    {3}{82.8018pt}\LT@entry 
+    {3}{413.22942pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{Log Book (Continued)}}{12}\protected@file@percent }

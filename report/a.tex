@@ -1,8 +1,25 @@
 \documentclass{article}
+\usepackage[margin=2.5cm, bottom=3cm]{geometry}
 \usepackage{titlesec}
 \usepackage{titling}
-\usepackage{booktabs}
 \usepackage{float}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\usepackage{longtable}
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[longend, linesnumbered, ruled]{algorithm2e}
+
+\SetKwInOut{KwIn}{Input}
+\SetKwInOut{KwOut}{Output}
+\SetKw{Let}{{\bfseries Let} }
+\SetKwFor{While}{WHILE}{}{ENDWHILE}
+\SetKwIF{If}{}{}{IF}{THEN}{}{}{ENDIF}
+\SetKwSwitch{Switch}{Case}{Other}{CASEWHERE}{}{CASE}{}{}{ENDCASE}
+\SetKw{KwRet}{Return}
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
 
 \begin{document}
 \begin{titlepage}
@@ -14,6 +31,7 @@
             Max Hamilton\\[0.3cm]
             35419837
         }
+        \includegraphics{logo}
     \end{center}
     
 \end{titlepage}
@@ -39,7 +57,7 @@ The user of the server requests the server initialise a new user. The server wil
     \midrule
     Fake clients sending initialisation requests. & The server generates the initialisation code on request from the user of the server, so an attempt to initialise without prior planning will be ignored.\\
     \midrule
-    Code being sniffed on network and used to send a false request. & The code is sent over a secure TLS connection.\\
+    Code being sniffed on network and used to send a false request. & The code is sent over a secure TLS connection, and after being used once, is no longer valid.\\
     \midrule
     Username and password being sniffed or altered. & The username and password are sent over a secure TLS connection.\\
     \midrule
@@ -51,7 +69,7 @@ The user of the server requests the server initialise a new user. The server wil
     \label{tab:secconsinit}
 \end{table}
 \subsubsection{Access control and authentication}
-Users of the client do not log in in the traditional sense, the sole factor controlling their account is their private key. That key can be put onto a USB stick and deleted from the original computer for physical control, or left as a file on the computer. At all times, the server broadcasts 2 things using UDP. First, periodically, every x seconds or y messages, the server will generate a code, and encrypt it for multiple recipients with the public keys of every registered account. The encrypted code is then broadcasted, along with the hash of the original code. The server also broadcasts a list of public keys, and the usernames associated with them, encrypted many times in the same way as before, as well as the hash of the unencrypted list. It can be detected how many recipients a message was encrypted for, so the server would have a maximum number of clients, and add a certain amount of 'junk recipients', in order to prevent attackers from detecting the number of clients a server has. The possession of a private key imparts its user with 4 privileges: To decrypt the sending code broadcast by the server, allowing it to send messages to the server which will not be discarded, to decrypt the list of usernames and public keys broadcast by the server, allowing it to encrypt messages, and match public keys to username, to sign messages sent, and to decrypt messages received.
+Users of the client do not log in in the traditional sense, the sole factor controlling their account is their private key. That key can be put onto a USB stick and deleted from the original computer for physical control, or left as a file on the computer. To send a message to the server, a client will need to sign a string of random bits provided by the server with their private key. The possession of a private key imparts its user with 2 privileges: To decrypt the sending/receiving code broadcast by the server, allowing it to send messages to the server which will not be discarded, and pull messages from the server.
 \begin{table}[H]
     \centering
     \caption{Security considerations}
@@ -60,19 +78,15 @@ Users of the client do not log in in the traditional sense, the sole factor cont
     \toprule
     \textbf{Possible threat} & \textbf{Prevention}\\
     \midrule
-    Hostile actors sniffing the broadcast sending code or list of public keys and usernames. & Both messages are sent encrypted, and the amount of recipients is obfuscated.\\
-    \midrule
-    User leaks the sending code, enabling a hostile actor to overwhelm the server with spam & The sending code is refreshed after a certain time period has passed or a certain number of messages have been sent.\\
+        Attacker sniffs the signed response and uses it in a replay attack & It is very unlikely that the same series of random bits will be sent twice to enable a replay attack.\\
     \midrule
     User leaks their private key & No prevention. If a private key is leaked, hostile actors can impersonate the owner, read the owner's messages, read the sending codes, and read the list of usernames and public keys. Users must not leak their private keys.\\
-    \midrule
-    Server creates different sending codes or public key lists for each user, to track the author of messages or deceive users. & The server must send a hash of the plaintext version of everything they encrypt, and clients can check that the message they decrypt matches the hash. If the server tries to send different codes to different people, the deception can be detected by the non-matching of the hash.\\
     \bottomrule
     \end{tabular}
     \label{tab:secconsauth}
 \end{table}
 \subsubsection{Sending Messages}
-To send a message, the user of the client composes it, attaches any files, which are just concatenated onto the end of the message, inputs the usernames of any recipients, and requests the client to send. If the client does not want the server to know the length of the message, all messages padded to a previously arranged maximum size. The client then adds a header composing of the username of the user of the client, and a digital signature using the client's stored private key. The client then encrypts the message for multiple recipients, including itself, and every intended recipient. If the client does not want the server to know the number of recipients, they can generate junk recipients and randomly insert them into the list. The client then reads and decrypts the sending code broadcast by the server, and sends this header plus encrypted message and original header to the server, along with the sending code it received earlier. If uploading messages is done directly, servers can build a profile of which IP addresses sent which message. This can be prevented by sending messages via a proxy, VPN, or over Tor. The server verifies the code, and stores the message, as well as the time at which it was received. If the server receives a message with an incorrect code, it discards it, and logs the IP for potential blocking. The server refreshes the code being broadcast after a certain period of time, or after a certain number of messages have been sent.
+To send a message, the user of the client composes it, attaches any files, which are just concatenated onto the end of the message, inputs the usernames of any recipients, and requests the client to send. If the client does not want the server to know the length of the message, all messages padded to a previously arranged maximum size. The client then adds a header composing of the username of the user of the client, and a digital signature using the client's stored private key. The client then encrypts the message for multiple recipients, including itself, and every intended recipient. If the client does not want the server to know the number of recipients, they can generate junk recipients and randomly insert them into the list. The client then connects to the server, and sends this header plus encrypted message and original header to the server, along with the sending code it received earlier. If uploading messages is done directly, servers can build a profile of which IP addresses sent which message. This can be prevented by sending messages via a proxy, VPN, or over Tor. The server verifies the code, and stores the message, as well as the time at which it was received. If the server receives a message with an incorrect code, it discards it, and logs the IP for potential blocking. The server refreshes the code being broadcast after a certain period of time, or after a certain number of messages have been sent.
 \begin{table}[H]
     \centering
     \caption{Security considerations}
@@ -93,7 +107,7 @@ To send a message, the user of the client composes it, attaches any files, which
     \label{tab:secconssend}
 \end{table}
 \subsubsection{Receiving messages}
-Each client will store the most recent message that it has received, and periodically poll via TLS over TCP/IP the server for any messages sent past that time. If there are, the server will send the earliest message past the received time, and a bit indicating whether there are more messages available. If there are, the client will continue polling until there are no more messages available. When a client polls for a message, it sends the timestamp it wants the messages past, and appends the SR code. The server can then verify the code before sending a small snippet which the client can use to determine whether the message is intended for them. If it isn't, they move on, but if it is, they request the full message, with the same code. The code is again verified, the encrypted message is sent, and the client then locally decrypts it to display to the user. The client will keep a local log of past message titles, senders, timestamps, and a list of unique words, stored encrypted on the disk, to enable the user of the client to search and browse past messages. The full message is downloaded on demand by sending a request with the timestamp the message was sent to the server. If the client does not use a proxy, the server can build a profile of which IP addresses download which messages, even without names to match. To prevent this, clients can use a proxy or VPN, or connect over Tor.
+Each client will store the most recent message that it has received, and periodically poll via TLS over TCP/IP the server for any messages sent past that time, as well as any new users. If there are, the server will send the earliest message past the received time, and a bit indicating whether there are more messages available. If there are, the client will continue polling until there are no more messages available. When a client polls for a message, it sends the timestamp it wants the messages past. The server can then send a small snippet which the client can use to determine whether the message is intended for them. If it isn't, they move on, but if it is, they request the full message. The code is again verified, the encrypted message is sent, and the client then locally decrypts it to display to the user. The client will keep a local log of past message titles, senders, timestamps, and a list of unique words, stored encrypted on the disk, to enable the user of the client to search and browse past messages. The full message is downloaded on demand by sending a request with the timestamp the message was sent to the server. If the client does not use a proxy, the server can build a profile of which IP addresses download which messages, even without names to match. To prevent this, clients can use a proxy or VPN, or connect over Tor. In the event the volume of messages becomes too much for the client to check every one, the clients can be subdivided into groups, with the server storing the messages of each group seperately, and senders including the group of the recipient in message headers. Then, only messages in the group of the recipient are presented by the server. This seperation into groups gives the server a small amount of information about recipients, in exchange for much faster performance
 \begin{table}[H]
     \centering
     \caption{Security considerations}
@@ -102,7 +116,7 @@ Each client will store the most recent message that it has received, and periodi
     \toprule
     \textbf{Possible threat} & \textbf{Prevention}\\
     \midrule
-    Hostile actors polling the server. & Requests for messages must include the code, and the sent messages are completely encrypted.\\
+    Hostile actors polling the server. & Requests for messages must authenticate, and the sent messages are completely encrypted.\\
     \midrule
     Hostile actors sniffing the transmitted messages. & Messages are sent over TLS, with another layer of encryption.\\
     \midrule
@@ -118,7 +132,7 @@ Each client will store the most recent message that it has received, and periodi
     \label{tab:secconsrecv}
 \end{table}
 \subsubsection{Storage}
-The server will store, in an SQL database:
+The server will store, in an database:
 \begin{itemize}
     \item Encrypted messages.
     \item Timestamps of encrypted messages.
@@ -126,19 +140,214 @@ The server will store, in an SQL database:
 \end{itemize}
 \section{Planning the software solution}
 \subsection{Algorithms}
+\SetKwBlock{Begin}{BEGIN receive\_connections}{END receive\_connections}
+\begin{algorithm}[H]
+    \label{alg:receiveConnections}    
+    \caption{Loops forever, handling incoming connections concurrently}
+    \Begin{
+        \Let PORT = 2001\\
+        \Let listener = BindTcpListener(PORT)\\
+        \Let fileAccessStatus = Mutex::Nothing\\
+        \emph{A mutex allows for a value to be safely shared and mutated between threads} \\
+        \Let userKeyMap = Mutex::BiHashmap::empty\\
+        \emph{A BiHashmap is a 2-way hashmap, where either type can be used as an index} \\
+        \While{true}{
+            \If{listener.newConnectionAvailable}{
+                spawn new thread with function \underline{handle\_connection}(listener.newConnection, fileAccessStatus, userKeyMap)\\
+            }
+        }
+    }
+\end{algorithm}
+\SetKwBlock{Begin}{BEGIN handle\_connection}{END handle\_connection}
+\begin{algorithm}[H]
+    \label{alg:handleConnection}    
+    \Input{A connection to a client, the file access lock, and the map between users and keys}
+    \caption{Handles a single connection, authenticating then dispatching it off the the dedicated function to handle it's request}
+    \Begin{
+        \Let randBytes = \underline{random\_bytes}(8)\\
+        clientConnection.send(randBytes)\\
+        clientConnection.read(publicKey, signature)\\
+        \If{publicKey not in userKeyMap}{
+            clientConnection.send(DENIED)\\
+            Return\\
+        }
+        \If{signature invalid}{
+            clientConnection.send(DENIED)\\
+            Return\\
+        }
+        clientConnection.send(ACCEPTED)\\
+        clientConnection.read(intent)\\
+        \Switch{intent}{
+            \Case{WriteData}{
+                \While{true}{
+                    \If{fileAccess = NotInUse}{
+                        fileAccess = InUseWriting\\
+                        Break\\
+                    }
+                    Sleep(1 millisecond)\\
+                }
+                \underline{receive\_and\_store}(clientConnection)\\
+                fileAccess = NotInUse\\
+            }
+            \Case{DetermineRecipiency}{
+                \While{true}{
+                    \If{fileAccess = NotInUse OR fileAccess = InUseReading}{
+                        fileAccess = InUseReading\\
+                        Break\\
+                    }
+                    Sleep(1 millisecond)\\
+                }
+                \underline{handle\_recipiency\_query}(clientConnection)\\
+                fileAccess = NotInUse\\
+            }
+            \Case{FetchData}{
+                \While{true}{
+                    \If{fileAccess = NotInUse OR fileAccess = InUseReading}{
+                        fileAccess = InUseReading\\
+                        Break\\
+                    }
+                    Sleep(1 millisecond)\\
+                }
+                \underline{send\_message\_data}(clientConnection)\\
+                fileAccess = NotInUse\\
+            }
+            \Case{Otherwise:}{
+                Return Error
+            }
+        }
+    }
+\end{algorithm}
+
 \subsection{Prototype}
+For the prototype, I submit a working set of libraries for the client and server, as well as an extensive test suite, to confirm it is working and bug-free. The client GUI application and the server CLI application will rely on these libraries for the sending and receiving of messages.
 \subsection{Data Dictionary}
+This data dictionary is completed for the function "handle\_recipiency\_query", which handles a request from a client as to whether a particular message is for them.
+\begin{table}[H]
+    \centering
+    \caption{Data Dictionary}
+    \begin{tabular}{llp{0.2\textwidth}lp{0.25\textwidth}}
+        \toprule
+        \textbf{Identifier} & \textbf{Data Type} & \textbf{Description} & \textbf{Scope} & \textbf{Example}\\
+        \midrule
+        read\_count & usize & Holds the amount of bytes received from client & Local & \begin{minipage}{0.2\textwidth}let read\_count = client\_stream.read(\&mut buffer)\end{minipage}\\
+        \midrule
+        write\_count & usize & Holds the amount of bytes sent to client & Local & \begin{minipage}{0.2\textwidth}let write\_count = client\_stream.write(buffer)\end{minipage}\\
+        \midrule
+        timestamp\_buf & [u8; 8] & Holds the timestamp of the message the client is enquiring about, in byte form, after being sent over a network & Local & \begin{minipage}{0.2\textwidth}let read\_count = client\_stream.read(\&mut timestamp\_buf)\end{minipage}\\
+        \midrule
+        timestamp & u64 & Holds the timestamp of the message the client is enquiring about & Local & \begin{minipage}{0.2\textwidth}let timestamp = u64::from\_be\_bytes\\(timestamp\_buf)\end{minipage}\\
+        \midrule
+        existence\_confirmation\_buffer & [u8; 1] & Sent to client to let them know if the message they are asking about exists & Local & \begin{minipage}{0.2\textwidth}client\_stream.write(\\existence\_confirma\\tion\_buffer)\end{minipage}\\
+        \midrule
+        ENCRYPTED\_KEY\\\_LEN & u64 & The length in bytes of the symmetric key, encrypted asymmetrically. A constant & Global & if read\_count < ENCRYPTED\_KEY\_LEN \{bail!("Database file at path \{database\_path\} is malformed. Could not read keys. Tried to read \{ENCRYPTED\_KEY\_LEN\} bytes but received \{read\_count\}")\}\\
+        \bottomrule
+    \end{tabular}
+    \label{tab:datadictionary}
+\end{table}
 \subsection{Modelling tools}
+\begin{figure}[H]
+\includegraphics[scale=0.6]{dfd1}
+\caption{Data flow diagram for the process of adding a new client}
+\end{figure}
+\begin{figure}[H]
+\includegraphics[scale=0.6]{ct1}
+\caption{Context diagram for the server handling messages}
+\end{figure}
 \subsection{Programming language}
+My selected programming language is Rust. I have chosen rust for its ability to send and manipulate individual bits easily (essential for sending and receiving messages over TCP, encrypting messages, and writing messages to disk), its mature networking and encryption libraries, essential for the operation of the project, which make it simple to both encrypt and send messages, its memory safe nature, which utilises a borrowing and ownership system to eliminate race conditions, use-after free errors, double-free errors, unexpected mutation, and many other memory-related problems, and its ergonomic and useful tools, such as trait-based generics, functional programming tools such as iterators, and well-documented standard library, which aid in ease and speed of programming, and its speed, which ensures that the final product is fast and responsive for all users.
 \subsection{Logbook}
+For the full logbook, see section 6.2, the end of this report.
 \section{Building the software solution}
 \subsection{Source code}
+The source code is submitted online. It should be noted that in the submitted code, the client application is not yet developed, so future references to it, and its planned command line interface, refer to the plan, and how it will behave when developed.
 \subsection{Feedback}
+\begin{table}[H]
+    \centering
+    \caption{Feedback form}
+    \begin{tabular}{p{0.2\textwidth}p{0.4\textwidth}p{0.4\textwidth}}
+        \toprule
+        \textbf{Question} & \textbf{Answer 1} & \textbf{Answer 2}\\
+        \midrule
+        How easy do you find the administration of the server? & Easy. The command line commands are very simple, and the provided online help file alleviates any confusion. & The server is easy to initialise and start, but the process of adding or removing users is confusing.\\
+        \midrule
+        How do you find the process of sending messages? & It is annoying to have to type the whole message in a terminal, I would prefer a GUI or the ability to attach pre-written text files. & Alright, although I often find myself typing a message in another tab, and then copy-pasting it into the terminal.\\
+        \bottomrule
+    \end{tabular}
+    \label{tab:feedback}
+\end{table}
+In response to the feedback, I added an explicit mention of the ability of the linux command line to pipe the contents of a file into the standard input to the online help file accessed via the command line, so users do not need to type out full messages in the terminal.
 \section{Documenting to meet installation of software solution}
 \subsection{Installation guide}
+\subsubsection{Server installation}
+To install the server, download the distributed binary, and run "server init pub\_key\_path username", as superuser, to initialise the server, with the first admin account. Then, run "server start", also as superuser, to start the server.
+\subsubsection{Client installation}
+Once the client application folder is downloaded, navigate to it and run the installer, as superuser. Once done, the client can be run by running the command: "client start", or the online help file can be viewed by running "client help".
 \subsection{User manual}
+\subsubsection{Admin}
+As an administrator, you will need to run the server, and add or remove users. In order to run the server, once it is installed, simply run the command "server start", as superuser. Then, in order to add or remove users, open the client application, navigate to the admin panel, then click on "Add or Remove User". If you intend to add a user, the application will give you a code, which you must give to the user to add, so they can register themselves. If you intend to remove a user, simply enter that user's username.
+\subsubsection{User}
+In order to start the client application, which regularly polls for new messages, simply run "client start", in a command line. In order to send a message, run the command "client send recipient1 recipient2 recipient3", with an arbitrarily long list of recipients, before typing your message into the standard input. You can also pipe the contents of a file with a pre-written message into standard input, so as to not have to type the message into the terminal. In order to view your messages, run the command "client view", in order to browse the most recent messages.
 \subsection{Testing methods}
+Included in the submitted source code is a full testing module for the operation of sending messages between server and client, covering many concurrent clients all interfacing with 1 server, and testing many aspects, such as file content integrity, false negatives and positives on message existence, and load testing with many clients at once, some of whom unexpectedly disconnect. These tests can be run with the command "cargo test".
 \section{Evaluate and suggest modifications}
 \subsection{Evaluation}
+The main issue with my project is that the final product is only a prototype, with the underlying logic, but not a proper user interface for the client. In order to improve this in future, I would reduce the large scope of the project, or explicitly allocate working time, so as to fully complete the project within the required time frame. In aspects other than time management and scope, there are no outstanding issues with my project or implementation. The vast majority of the project is completed, but the lack of a user interface leads to difficulties demonstrating. Due to this, the demonstration of the program will be in the testing, which is designed to simulate the proccess of clients sending, and receiving messages.
 \subsection{Logbook}
+{
+\centering
+\begin{longtable}{p{0.15\textwidth}p{0.85\textwidth}}
+\caption{Log Book}\\
+\endfirsthead
+\caption{Log Book (Continued)}\\
+\midrule
+\endhead
+\toprule
+Date & Summary\\
+\midrule
+22/10/2022 & Came up with idea for the project. A messenger app. I put a bit of thought into how it would work, and the client. The client would be a company that needs a secure messaging service similar to email. I would provide a client software, and a server software. The client software would be a GUI, and the server may be a GUI or a CLI. The server software will not be able to read messages, and will have the minimum possible information about the messages. This allows for secure outsourcing of the server hosting if the company cannot run their own servers. To add a new user, the server would generate a code which the system administrator could communicate to the new user, which the client uses to send a username and password to the server. On initialisation, the client would generate a public and private key. The client keeps the private key, and sends the public key to the server. To send a message, the client requests the recipient's public key, and encrypts the message with it. The encrypted message is then sent to the server, where it is stored indefinitely. I think I can make it anonymous who exactly is sending and receiving messages. The message on the server is then available for download by all clients, but only the recipient can use their private key to decrypt it. I can have anonymous uploads by encrypting the name of the sender with the rest of the message, and anonymous downloads by having a constant magic number at the start of each message. Every client, on seeing a new available message, would try to decrypt it with their private key, and if the constant magic number didn't match, they could discard it, meaning only the recipient would be able to access it. Additionally, messages would be signed with the sender's public key, then the signature encrypted with the rest. That way, once the message was decrypted, the identity of the sender could be verified. A bad actor could download all encrypted messages, but the would not know the intended recipient, sender, or content. A lot of aspects could be controlled by the server software, such as file size caps, message size limits, and length of saved history.\\
+\midrule
+22/10/2022 & Formulated my thoughts by writing the description of the solution, in a lot of detail. Might have to cut it down later.\\
+\midrule
+22/10/2022 & I have finished the first draft of the design brief, and have a complete plan for the high-level design of my program.\\
+\midrule
+23/10/2022 & I have done some research and begun to implement the core functionality of the client. Experiencing some difficulties deciding to encrypt files on disk, or to pull them into memory.\\
+\midrule
+29/10/2022 & I have located the cryptography libraries to use, as well as encrypting files bit by bit so they do not take up huge amounts of memory.\\
+\midrule
+16/11/2022 & I have written the code for clients sending messages, and the server receiving and storing them.\\
+\midrule
+23/11/2022 & I have written the code for clients asking about the recipiency of messages, and the server answering.\\
+\midrule
+30/11/2022 & I have written the code for clients downloading message contents.\\
+\midrule
+05/2/2022 & I have started writing test code for the general sending and receiving of messages.\\
+\midrule
+10/2/2022 & I have finished writing the test code, and am debugging numerous issues relating to encryption, error handling, and bugs in test code.\\
+\midrule
+16/2/2022 & I have gotten single-threaded tests working, and am now writing multi-threaded tests.\\
+\midrule
+20/1/2022 & I have added mutex-style guards on the files storing messages, which should eliminate most multi-threaded bugs.\\
+\midrule
+25/11/2022 & I have finished debugging the multi-threaded code, and the full test suite is passing without bugs.\\
+\midrule
+26/11/2022 & I have started work on the user-facing CLI application for the server.\\
+\midrule
+16/3/2023 & I have begun a redesign of the user model, including methods of adding and removing users, and keeping the user list up to date\\
+\midrule
+20/3/2022 & Still working on the user model\\
+\midrule
+28/3/2022 & Finalising user model, working on code for updating users from user file\\
+\midrule
+7/4/2022 & Finalised updating users, working on code for adding and removing users\\
+\midrule
+14/4/2022 & Still working on adding and removing users\\
+\midrule
+29/4/2022 & Finished adding and removing users, finalising server interface\\
+\midrule
+3/4/2022 & Finished server interface\\
+\midrule
+6/4/2022 & Finalising testing and final product\\
+\bottomrule
+\end{longtable}
+}
 \end{document}

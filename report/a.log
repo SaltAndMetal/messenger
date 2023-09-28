@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.5.20)  22 OCT 2022 19:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.5.20)  7 MAY 2023 19:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -23,17 +23,43 @@ File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 \belowcaptionskip=\skip48
 \bibindent=\dimen134
 )
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2019/11/07 v1.0c TeX engine tests
+))
+\Gm@cnth=\count175
+\Gm@cntv=\count176
+\c@Gm@tempcnt=\count177
+\Gm@bindingoffset=\dimen135
+\Gm@wd@mp=\dimen136
+\Gm@odd@mp=\dimen137
+\Gm@even@mp=\dimen138
+\Gm@layoutwidth=\dimen139
+\Gm@layoutheight=\dimen140
+\Gm@layouthoffset=\dimen141
+\Gm@layoutvoffset=\dimen142
+\Gm@dimlist=\toks15
+)
 (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2019/10/16 v2.13 Sectioning titles
 \ttl@box=\box45
 \beforetitleunit=\skip49
 \aftertitleunit=\skip50
-\ttl@plus=\dimen135
-\ttl@minus=\dimen136
-\ttl@toksa=\toks14
-\titlewidth=\dimen137
-\titlewidthlast=\dimen138
-\titlewidthfirst=\dimen139
+\ttl@plus=\dimen143
+\ttl@minus=\dimen144
+\ttl@toksa=\toks16
+\titlewidth=\dimen145
+\titlewidthlast=\dimen146
+\titlewidthfirst=\dimen147
 )
 (/usr/share/texlive/texmf-dist/tex/latex/titling/titling.sty
 Package: titling 2009/09/04 v2.1d maketitle typesetting
@@ -41,59 +67,223 @@ Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmargin=\skip52
 \droptitle=\skip53
 )
-(/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
-Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen140
-\lightrulewidth=\dimen141
-\cmidrulewidth=\dimen142
-\belowrulesep=\dimen143
-\belowbottomsep=\dimen144
-\aboverulesep=\dimen145
-\abovetopsep=\dimen146
-\cmidrulesep=\dimen147
-\cmidrulekern=\dimen148
-\defaultaddspace=\dimen149
-\@cmidla=\count175
-\@cmidlb=\count176
-\@aboverulesep=\dimen150
-\@belowrulesep=\dimen151
-\@thisruleclass=\count177
-\@lastruleclass=\count178
-\@thisrulewidth=\dimen152
-)
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count179
-\float@exts=\toks15
+\c@float@type=\count178
+\float@exts=\toks17
 \float@box=\box46
-\@float@everytoks=\toks16
+\@float@everytoks=\toks18
 \@floatcapt=\box47
+)
+(/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen148
+\lightrulewidth=\dimen149
+\cmidrulewidth=\dimen150
+\belowrulesep=\dimen151
+\belowbottomsep=\dimen152
+\aboverulesep=\dimen153
+\abovetopsep=\dimen154
+\cmidrulesep=\dimen155
+\cmidrulekern=\dimen156
+\defaultaddspace=\dimen157
+\@cmidla=\count179
+\@cmidlb=\count180
+\@aboverulesep=\dimen158
+\@belowrulesep=\dimen159
+\@thisruleclass=\count181
+\@lastruleclass=\count182
+\@thisrulewidth=\dimen160
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen161
+\Gin@req@width=\dimen162
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip54
+\LTright=\skip55
+\LTpre=\skip56
+\LTpost=\skip57
+\LTchunksize=\count183
+\LTcapwidth=\dimen163
+\LT@head=\box48
+\LT@firsthead=\box49
+\LT@foot=\box50
+\LT@lastfoot=\box51
+\LT@cols=\count184
+\LT@rows=\count185
+\c@LT@tables=\count186
+\c@LT@chunks=\count187
+\LT@p@ftn=\toks19
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
+)
+(/usr/share/texlive/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+Package: algorithm2e 2017/07/18 v5.2 algorithms environments
+\c@AlgoLine=\count188
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\algocf@hangindent=\skip58
+
+(/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count189
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/relsize/relsize.sty
+Package: relsize 2013/03/29 ver 4.1
+)
+\skiptotal=\skip59
+\skiplinenumber=\skip60
+\skiprule=\skip61
+\skiphlne=\skip62
+\skiptext=\skip63
+\skiplength=\skip64
+\algomargin=\skip65
+\skipalgocfslide=\skip66
+\algowidth=\dimen164
+\inoutsize=\dimen165
+\inoutindent=\dimen166
+\interspacetitleruled=\dimen167
+\interspacealgoruled=\dimen168
+\interspacetitleboxruled=\dimen169
+\algocf@ruledwidth=\skip67
+\algocf@inoutbox=\box52
+\algocf@inputbox=\box53
+\AlCapSkip=\skip68
+\AlCapHSkip=\skip69
+\algoskipindent=\skip70
+\algocf@nlbox=\box54
+\algocf@hangingbox=\box55
+\algocf@untilbox=\box56
+\algocf@skipuntil=\skip71
+\algocf@capbox=\box57
+\algocf@lcaptionbox=\skip72
+\algoheightruledefault=\skip73
+\algoheightrule=\skip74
+\algotitleheightruledefault=\skip75
+\algotitleheightrule=\skip76
+\c@algocfline=\count190
+\c@algocfproc=\count191
+\c@algocf=\count192
+\algocf@algoframe=\box58
+\algocf@algobox=\box59
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count180
-\l__pdf_internal_box=\box48
+\l__kernel_color_stack_int=\count193
+\l__pdf_internal_box=\box60
 )
 (./a.aux)
 \openout1 = `a.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
- [1
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./a.toc
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(71.13188pt, 472.03123pt, 71.13188pt)
+* v-part:(T,H,B)=(71.13188pt, 638.47984pt, 85.35826pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=472.03123pt
+* \textheight=638.47984pt
+* \oddsidemargin=-1.1381pt
+* \evensidemargin=-1.1381pt
+* \topmargin=-38.1381pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count194
+\scratchdimen=\dimen170
+\scratchbox=\box61
+\nofMPsegments=\count195
+\nofMParguments=\count196
+\everyMPshowfont=\toks20
+\MPscratchCnt=\count197
+\MPscratchDim=\dimen171
+\MPnumerator=\count198
+\makeMPintoPDFobject=\count199
+\everyMPtoPDFconversion=\toks21
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+<./images/logo.png, id=1, 475.7775pt x 475.7775pt>
+File: ./images/logo.png Graphic file (type png)
+<use ./images/logo.png>
+Package pdftex.def Info: ./images/logo.png  used on input line 34.
+(pdftex.def)             Requested size: 475.77632pt x 475.77632pt.
+
+Overfull \hbox (3.74509pt too wide) in paragraph at lines 32--35
+ [] 
+ []
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images/logo.png>]
+(./a.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -102,91 +292,215 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \tf@toc=\write3
 \openout3 = `a.toc'.
 
-
-[1]
-Underfull \hbox (badness 10000) in paragraph at lines 23--24
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 28--29
+ [1]
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 46--46
-[]\OT1/cmr/m/n/10 Initialisation code be-ing
+Underfull \hbox (badness 10000) in paragraph at lines 46--47
+
  []
 
 
-Overfull \hbox (24.0pt too wide) in paragraph at lines 36--52
+Underfull \hbox (badness 10000) in paragraph at lines 64--64
+[]\T1/cmr/m/n/10 Initialisation code be-ing sniffed
+ []
+
+
+Overfull \hbox (23.99998pt too wide) in paragraph at lines 54--70
  [][] 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 69--69
-[]\OT1/cmr/m/n/10 Server cre-ates dif-fer-ent
+Overfull \hbox (23.99998pt too wide) in paragraph at lines 77--87
+ [][] 
  []
 
 
-Overfull \hbox (24.0pt too wide) in paragraph at lines 59--73
+Underfull \hbox (badness 1527) in paragraph at lines 102--102
+[]\T1/cmr/m/n/10 Server be-ing over-whelmed by fake
+ []
+
+
+Overfull \hbox (23.99998pt too wide) in paragraph at lines 94--108
  [][] 
  []
 
 [3]
-Underfull \hbox (badness 1137) in paragraph at lines 88--88
-\OT1/cmr/m/n/10 by fake mes-sages from a
- []
-
-
-Overfull \hbox (24.0pt too wide) in paragraph at lines 80--94
+Overfull \hbox (23.99998pt too wide) in paragraph at lines 115--133
  [][] 
  []
 
 [4] [5]
-Underfull \hbox (badness 1308) in paragraph at lines 109--109
-[]\OT1/cmr/m/n/10 Hostile clients at-tempt-ing
+Overfull \vbox (12.17749pt too high) has occurred while \output is active []
+
+
+[6]
+Underfull \hbox (badness 2376) in paragraph at lines 232--232
+\T1/cmr/m/n/10 bytes re-ceived from
  []
 
 
-Underfull \hbox (badness 1931) in paragraph at lines 111--111
-[]\OT1/cmr/m/n/10 Server send-ing fraud-u-lent
+Underfull \hbox (badness 10000) in paragraph at lines 232--232
+[]\T1/cmr/m/n/10 let read_count =
  []
 
 
-Underfull \hbox (badness 3354) in paragraph at lines 113--113
-[]\OT1/cmr/m/n/10 Server not send-ing mes-
+Overfull \hbox (17.34569pt too wide) in paragraph at lines 232--232
+\T1/cmr/m/n/10 client_stream.read(&mut
  []
 
 
-Underfull \hbox (badness 2189) in paragraph at lines 115--115
-[]\OT1/cmr/m/n/10 Server de-tect-ing who re-
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
+[]\T1/cmr/m/n/10 let write_count =
  []
 
 
-Overfull \hbox (24.0pt too wide) in paragraph at lines 101--119
+Overfull \hbox (24.59392pt too wide) in paragraph at lines 234--234
+\T1/cmr/m/n/10 client_stream.write(buffer) 
+ []
+
+
+Underfull \hbox (badness 1953) in paragraph at lines 236--236
+\T1/cmr/m/n/10 of the mes-sage the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 236--236
+\T1/cmr/m/n/10 client is en-quir-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 236--236
+[]\T1/cmr/m/n/10 let read_count =
+ []
+
+
+Overfull \hbox (17.34569pt too wide) in paragraph at lines 236--236
+\T1/cmr/m/n/10 client_stream.read(&mut
+ []
+
+
+Underfull \hbox (badness 1953) in paragraph at lines 238--238
+\T1/cmr/m/n/10 of the mes-sage the
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 238--238
+\T1/cmr/m/n/10 client is en-quir-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 238--238
+[]\T1/cmr/m/n/10 let times-tamp =
+ []
+
+
+Underfull \hbox (badness 3503) in paragraph at lines 242--242
+\T1/cmr/m/n/10 en-crypted asym-met-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 242--243
+[]\T1/cmr/m/n/10 if read_count < EN-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 242--243
+\T1/cmr/m/n/10 CRYPTED_KEY_LEN
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 242--243
+\T1/cmr/m/n/10 {bail!("Database file at
+ []
+
+
+Underfull \hbox (badness 1642) in paragraph at lines 242--243
+\T1/cmr/m/n/10 path {database_path} is
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 242--243
+\T1/cmr/m/n/10 CRYPTED_KEY_LEN}
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 242--243
+\T1/cmr/m/n/10 bytes but re-ceived
+ []
+
+
+Overfull \hbox (18.7031pt too wide) in paragraph at lines 228--246
  [][] 
  []
 
-[6] [7] [8] (./a.aux) ) 
+<./images/dfd1.png, id=35, 643.40375pt x 506.89375pt>
+File: ./images/dfd1.png Graphic file (type png)
+<use ./images/dfd1.png>
+Package pdftex.def Info: ./images/dfd1.png  used on input line 249.
+(pdftex.def)             Requested size: 386.04523pt x 304.1386pt.
+<./images/ct1.png, id=37, 185.69376pt x 403.5075pt>
+File: ./images/ct1.png Graphic file (type png)
+<use ./images/ct1.png>
+Package pdftex.def Info: ./images/ct1.png  used on input line 253.
+(pdftex.def)             Requested size: 111.4171pt x 242.10637pt.
+[7] [8 <./images/dfd1.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 273--273
+\T1/cmr/m/n/10 pro-cess of send-ing
+ []
+
+
+Overfull \hbox (35.99277pt too wide) in paragraph at lines 267--277
+ [][] 
+ []
+
+[9 <./images/ct1.png>] [10]
+Overfull \hbox (23.99998pt too wide) in alignment at lines 298--300
+ [] [] 
+ []
+
+
+Overfull \hbox (23.99998pt too wide) in alignment at lines 300--303
+ [] [] 
+ []
+
+
+Overfull \hbox (23.99998pt too wide) in alignment at lines 303--344
+ [] [] 
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 344
+ []
+
+
+Overfull \hbox (23.99998pt too wide) in alignment at lines 344--351
+ [] [] 
+ []
+
+[11] [12] (./a.aux) ) 
 Here is how much of TeX's memory you used:
- 864 strings out of 481239
- 12564 string characters out of 5920377
- 254406 words of memory out of 5000000
- 16189 multiletter control sequences out of 15000+600000
- 535096 words of font info for 33 fonts, out of 8000000 for 9000
+ 3486 strings out of 481239
+ 49520 string characters out of 5920377
+ 321547 words of memory out of 5000000
+ 18735 multiletter control sequences out of 15000+600000
+ 541080 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 25i,10n,29p,1482b,241s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.
-enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf/font
-s/type1/public/cm-super/sfrm1000.pfb>
-Output written on a.pdf (9 pages, 86433 bytes).
+ 43i,24n,45p,2171b,583s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc
+}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf/
+fonts/type1/public/cm-super/sfbx0700.pfb></usr/share/texmf/fonts/type1/public/c
+m-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb
+></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/f
+onts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm
+-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2074.pfb>
+</usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on a.pdf (13 pages, 233106 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 89 PDF objects out of 1000 (max. 8388607)
+ 60 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
